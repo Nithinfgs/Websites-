@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nike Air Max — Case Study | VVORK+STUDIO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0a0a0a;
+    --off-white: #f0ece3;
+    --accent: #ff3c00;
+    --accent2: #ffd100;
+    --gray: #1a1a1a;
+    --mid: #888;
+    --border: rgba(240,236,227,0.12);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--off-white);
+    font-family: 'Space Mono', monospace;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CURSOR */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 40px; height: 40px;
+    border: 1px solid var(--off-white);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.3s, height 0.3s;
+    opacity: 0.5;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9997;
+    opacity: 0.35;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 48px;
+    mix-blend-mode: difference;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.15em;
+    color: var(--off-white);
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--off-white);
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: var(--accent);
+    z-index: 200;
+    width: 0%;
+    transition: width 0.1s linear;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 40%, #1a0a00 0%, var(--black) 60%);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255,60,0,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,60,0,0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+    animation: gridMove 20s linear infinite;
+  }
+  @keyframes gridMove {
+    from { transform: translateY(0); }
+    to { transform: translateY(80px); }
+  }
+
+  .hero-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.3s;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 14vw, 200px);
+    line-height: 0.88;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-title .line1 {
+    display: block;
+    opacity: 0;
+    animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) forwards 0.5s;
+  }
+  .hero-title .line2 {
+    display: block;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--off-white);
+    opacity: 0;
+    animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) forwards 0.65s;
+  }
+  .hero-title .line3 {
+    display: block;
+    color: var(--accent);
+    opacity: 0;
+    animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) forwards 0.8s;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 64px;
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    position: relative; z-index: 2;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1.1s;
+  }
+  .hero-meta-item label {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 8px;
+  }
+  .hero-meta-item span {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* SCROLL INDICATOR */
+  .scroll-ind {
+    position: absolute;
+    bottom: 80px;
+    right: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards 1.5s;
+  }
+  .scroll-ind span {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+    color: var(--mid);
+  }
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--accent);
+    animation: scrollDown 1.5s ease infinite;
+  }
+  @keyframes scrollDown {
+    from { top: -100%; }
+    to { top: 100%; }
+  }
+
+  /* BIG NUMBER */
+  .awards-strip {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    gap: 48px;
+    overflow: hidden;
+    background: var(--gray);
+  }
+  .award-tag {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--mid);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .award-tag::before {
+    content: '◆';
+    color: var(--accent);
+    font-size: 8px;
+  }
+  .awards-ticker {
+    display: flex;
+    gap: 48px;
+    animation: ticker 20s linear infinite;
+    white-space: nowrap;
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SECTION BASE */
+  section {
+    padding: 120px 48px;
+    position: relative;
+  }
+
+  /* QUESTION SECTION */
+  .section-question {
+    padding: 140px 48px;
+    max-width: 1000px;
+  }
+  .section-question h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(36px, 5vw, 72px);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--off-white);
+  }
+  .section-question h2 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .section-question .section-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 32px;
+  }
+
+  /* BIG VIDEO MOCKUP */
+  .video-full {
+    width: calc(100% - 96px);
+    margin: 0 48px;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    background: var(--gray);
+    border: 1px solid var(--border);
+  }
+
+  .shoe-canvas {
+    width: 100%;
+    aspect-ratio: 16/9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #111 0%, #1a0800 50%, #0a0a0a 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shoe-canvas-grid {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(255,60,0,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,60,0,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .shoe-svg-wrap {
+    position: relative;
+    z-index: 2;
+    animation: floatShoe 4s ease-in-out infinite;
+  }
+  @keyframes floatShoe {
+    0%, 100% { transform: translateY(0) rotate(-8deg); }
+    50% { transform: translateY(-20px) rotate(-6deg); }
+  }
+
+  /* OBJECTIVE */
+  .section-objective {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+    border-top: 1px solid var(--border);
+  }
+  .section-objective .obj-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 24px;
+  }
+  .section-objective h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 6vw, 80px);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 32px;
+  }
+  .section-objective p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(240,236,227,0.7);
+  }
+  .section-objective .obj-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 40px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--off-white);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 4px;
+    transition: gap 0.3s;
+  }
+  .section-objective .obj-link:hover { gap: 20px; }
+
+  /* STAT NUMBERS */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+    margin: 0 48px;
+  }
+  .stat-cell {
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 48px;
+  }
+  .stat-cell .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 8vw, 120px);
+    line-height: 1;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+  .stat-cell .stat-label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-top: 12px;
+  }
+  .stat-cell .stat-desc {
+    font-size: 13px;
+    line-height: 1.7;
+    color: rgba(240,236,227,0.5);
+    margin-top: 16px;
+    max-width: 260px;
+  }
+
+  /* MEDIA GRID */
+  .media-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 16px;
+    margin: 0 48px;
+  }
+  .media-cell {
+    background: var(--gray);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .media-cell.tall { grid-row: span 2; }
+  .media-cell .inner {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .media-cell.tall .inner { aspect-ratio: unset; height: 100%; min-height: 480px; }
+  .media-cell .caption {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+
+  /* COLORWAYS */
+  .colorway-bg-1 { background: linear-gradient(135deg, #1a0000, #3d0800); }
+  .colorway-bg-2 { background: linear-gradient(135deg, #0a0a1a, #001a3d); }
+  .colorway-bg-3 { background: linear-gradient(135deg, #0a1a00, #0d3d00); }
+
+  /* PERSONALITY TEXT */
+  .section-body {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .section-body .sec-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 32px;
+  }
+  .section-body h3 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 300;
+    line-height: 1.3;
+    margin-bottom: 32px;
+  }
+  .section-body p {
+    font-size: 15px;
+    line-height: 1.9;
+    color: rgba(240,236,227,0.65);
+  }
+
+  /* MARQUEE */
+  .marquee-section {
+    padding: 60px 0;
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    animation: marqueeFwd 18s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-track.reverse { animation-direction: reverse; }
+  @keyframes marqueeFwd {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .marquee-word {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 8vw, 120px);
+    padding: 0 40px;
+    letter-spacing: 0.05em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(240,236,227,0.2);
+  }
+  .marquee-word.filled { color: var(--off-white); -webkit-text-stroke: none; }
+  .marquee-word.accent { color: var(--accent); -webkit-text-stroke: none; }
+
+  /* MORE PROJECTS */
+  .more-projects {
+    padding: 120px 48px;
+    border-top: 1px solid var(--border);
+  }
+  .more-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 6vw, 80px);
+    letter-spacing: 0.05em;
+    margin-bottom: 60px;
+  }
+  .more-label span { color: var(--accent); }
+  .project-list { display: flex; flex-direction: column; }
+  .project-item {
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: var(--off-white);
+    transition: padding-left 0.4s cubic-bezier(0.16,1,0.3,1);
+    cursor: none;
+  }
+  .project-item:hover { padding-left: 24px; }
+  .project-item:hover .proj-title { color: var(--accent); }
+  .proj-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(24px, 3vw, 44px);
+    letter-spacing: 0.05em;
+    transition: color 0.3s;
+  }
+  .proj-tags {
+    display: flex;
+    gap: 16px;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+  .proj-arrow {
+    font-size: 24px;
+    color: var(--mid);
+    transition: transform 0.3s, color 0.3s;
+  }
+  .project-item:hover .proj-arrow { transform: translateX(8px); color: var(--accent); }
+
+  /* CTA */
+  .cta-section {
+    padding: 160px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-bg-text {
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30vw;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,60,0,0.06);
+    letter-spacing: -0.05em;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .cta-label {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 40px;
+  }
+  .cta-headline {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(40px, 6vw, 88px);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 56px;
+  }
+  .cta-headline em { font-style: italic; color: var(--accent); }
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--accent);
+    color: var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 20px 40px;
+    border-radius: 2px;
+    transition: gap 0.3s, transform 0.3s;
+    cursor: none;
+  }
+  .cta-btn:hover { gap: 24px; transform: translateY(-2px); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 60px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    letter-spacing: 0.1em;
+    line-height: 1;
+  }
+  .footer-logo span { color: var(--accent); }
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  .footer-links a {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--off-white); }
+  .footer-copy {
+    font-size: 10px;
+    color: rgba(136,136,136,0.5);
+    margin-top: 40px;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+    text-align: center;
+    letter-spacing: 0.1em;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.35s; }
+
+  /* SHOE SVG */
+  .shoe-visual {
+    width: min(520px, 80%);
+    height: auto;
+    filter: drop-shadow(0 40px 80px rgba(255,60,0,0.3));
+  }
+
+  /* SPLIT SECTION */
+  .split-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--border);
+  }
+  .split-col {
+    padding: 80px 48px;
+    border-right: 1px solid var(--border);
+  }
+  .split-col:last-child { border-right: none; }
+  .split-col h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    letter-spacing: 0.05em;
+    margin-bottom: 20px;
+  }
+  .split-col p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: rgba(240,236,227,0.6);
+  }
+
+  /* COLOR SWATCH ROW */
+  .swatch-row {
+    display: flex;
+    gap: 12px;
+    margin: 0 48px;
+    padding: 60px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .swatch-color {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+  }
+  .swatch-name {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+
+  /* SCROLLED STATE */
+  .is-scrolled nav { mix-blend-mode: normal; }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 0 24px 60px; }
+    .hero-meta { flex-direction: column; gap: 24px; }
+    section { padding: 80px 24px; }
+    .section-objective { grid-template-columns: 1fr; gap: 40px; }
+    .stats-row { grid-template-columns: 1fr; margin: 0 24px; }
+    .media-grid { grid-template-columns: 1fr; margin: 0 24px; }
+    .media-cell.tall { grid-row: span 1; }
+    .split-section { grid-template-columns: 1fr; }
+    .split-col { border-right: none; border-bottom: 1px solid var(--border); }
+    .video-full { margin: 0 24px; width: calc(100% - 48px); }
+    .more-projects { padding: 80px 24px; }
+    footer { padding: 40px 24px; flex-direction: column; gap: 32px; align-items: flex-start; }
+    .swatch-row { margin: 0 24px; }
+    .awards-strip { padding: 16px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">VVORK+STUDIO</a>
+  <ul class="nav-links">
+    <li><a href="#">Work →</a></li>
+    <li><a href="#">Services →</a></li>
+    <li><a href="#">About →</a></li>
+    <li><a href="#">Contact →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-eyebrow">Case Study — 2024</div>
+  <h1 class="hero-title">
+    <span class="line1">NIKE</span>
+    <span class="line2">AIR</span>
+    <span class="line3">MAX</span>
+  </h1>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <label>Client</label>
+      <span>Nike, Inc.</span>
+    </div>
+    <div class="hero-meta-item">
+      <label>Services</label>
+      <span>Branding<br>Web Design<br>3D / Motion<br>Campaign</span>
+    </div>
+    <div class="hero-meta-item">
+      <label>Impact</label>
+      <span>Awwwards SOTD<br>FWA of the Day<br>CSSDA SOTM</span>
+    </div>
+    <div class="hero-meta-item">
+      <label>Year</label>
+      <span>2024</span>
+    </div>
+  </div>
+  <div class="scroll-ind">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- AWARDS STRIP -->
+<div class="awards-strip">
+  <div class="awards-ticker">
+    <span class="award-tag">Awwwards Site of the Year</span>
+    <span class="award-tag">Awwwards SOTM</span>
+    <span class="award-tag">FWA of the Day</span>
+    <span class="award-tag">CSSDA of the Month</span>
+    <span class="award-tag">D&AD Pencil</span>
+    <span class="award-tag">Cannes Shortlist</span>
+    <span class="award-tag">Awwwards Site of the Year</span>
+    <span class="award-tag">Awwwards SOTM</span>
+    <span class="award-tag">FWA of the Day</span>
+    <span class="award-tag">CSSDA of the Month</span>
+    <span class="award-tag">D&AD Pencil</span>
+    <span class="award-tag">Cannes Shortlist</span>
+  </div>
+</div>
+
+<!-- BIG QUESTION -->
+<section class="section-question reveal">
+  <span class="section-label">// The Big Question</span>
+  <h2>How do we translate <em>50 years</em> of sneaker culture into a digital experience that <em>breathes</em>?</h2>
+</section>
+
+<!-- HERO VISUAL -->
+<div class="video-full reveal">
+  <div class="shoe-canvas">
+    <div class="shoe-canvas-grid"></div>
+    <div class="shoe-svg-wrap">
+      <!-- Air Max SVG Illustration -->
+      <svg class="shoe-visual" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+        <!-- Shadow -->
+        <ellipse cx="300" cy="305" rx="200" ry="12" fill="rgba(0,0,0,0.5)"/>
+        <!-- Outsole -->
+        <path d="M80,270 Q150,285 300,280 Q420,275 530,265 L520,285 Q400,295 300,298 Q160,300 80,288 Z" fill="#111"/>
+        <!-- Air unit bubble -->
+        <ellipse cx="420" cy="268" rx="70" ry="18" fill="rgba(255,60,0,0.15)" stroke="rgba(255,60,0,0.4)" stroke-width="1.5"/>
+        <text x="420" y="272" text-anchor="middle" font-size="10" fill="rgba(255,60,0,0.6)" font-family="Space Mono">AIR</text>
+        <!-- Midsole -->
+        <path d="M85,255 Q180,265 300,262 Q400,259 525,250 L530,268 Q420,278 300,280 Q160,283 80,273 Z" fill="#e8e0d0"/>
+        <!-- Upper base -->
+        <path d="M100,240 Q160,220 240,215 L340,212 Q440,215 510,235 L525,252 Q410,260 300,263 Q180,266 90,258 Z" fill="#1a1a1a"/>
+        <!-- Swoosh -->
+        <path d="M200,235 Q270,205 360,220 Q400,228 410,238 Q350,225 290,235 Q250,242 220,248 Z" fill="var(--accent)" opacity="0.9"/>
+        <!-- Upper detail lines -->
+        <path d="M150,240 L180,220" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        <path d="M200,238 L230,218" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        <path d="M250,236 L275,217" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        <!-- Tongue -->
+        <path d="M240,215 Q270,190 300,185 Q325,190 340,212 Q315,208 290,208 Q265,210 240,215 Z" fill="#222"/>
+        <!-- Toe box -->
+        <path d="M100,240 Q120,225 150,218 Q160,230 155,248 Q130,252 105,255 Z" fill="#222"/>
+        <!-- Laces -->
+        <line x1="250" y1="215" x2="335" y2="213" stroke="rgba(240,236,227,0.5)" stroke-width="2"/>
+        <line x1="252" y1="220" x2="333" y2="218" stroke="rgba(240,236,227,0.4)" stroke-width="1.5"/>
+        <line x1="255" y1="225" x2="330" y2="223" stroke="rgba(240,236,227,0.3)" stroke-width="1.5"/>
+        <!-- AIR MAX text on heel -->
+        <text x="470" y="252" text-anchor="middle" font-size="9" font-family="Bebas Neue, sans-serif" fill="rgba(240,236,227,0.4)" letter-spacing="2">AIR MAX</text>
+        <!-- Accent glow -->
+        <ellipse cx="300" cy="240" rx="180" ry="40" fill="none" stroke="rgba(255,60,0,0.08)" stroke-width="1"/>
+        <!-- Size tag -->
+        <text x="300" y="298" text-anchor="middle" font-size="8" font-family="Space Mono" fill="rgba(136,136,136,0.5)" letter-spacing="3">★ 360 DEGREES OF AIR ★</text>
+      </svg>
+    </div>
+    <!-- Corner labels -->
+    <span style="position:absolute;top:24px;left:24px;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(136,136,136,0.5)">Colorway 01 — Infrared</span>
+    <span style="position:absolute;bottom:24px;right:24px;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(136,136,136,0.5)">3D Render / Interactive</span>
+  </div>
+</div>
+
+<!-- OBJECTIVE -->
+<section class="section-objective reveal">
+  <div>
+    <p class="obj-label">// The Objective</p>
+    <h3>A LEGENDARY SILHOUETTE.<br>REBORN DIGITAL.</h3>
+  </div>
+  <div>
+    <p>Nike's Air Max needed more than a campaign — it needed a living, breathing digital universe. We built a platform that honours the shoe's legacy while launching it boldly into the future. Immersive 3D configurators, archival storytelling, community-driven content, and real-time colorway customisation converge into an experience as iconic as the visible Air unit itself.</p>
+    <a href="#" class="obj-link">Visit Live Site →</a>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-cell reveal">
+    <div class="stat-num" data-target="50">0</div>
+    <div class="stat-label">Years of Heritage</div>
+    <div class="stat-desc">Five decades of counter-culture, sport, and street-style distilled into one digital experience.</div>
+  </div>
+  <div class="stat-cell reveal reveal-delay-1">
+    <div class="stat-num" data-target="4200000">0</div>
+    <div class="stat-label">Unique Visitors / Launch Week</div>
+    <div class="stat-desc">Organic traffic driven by seeded drops, community builds, and 0 paid media in 72 hours.</div>
+  </div>
+  <div class="stat-cell reveal reveal-delay-2">
+    <div class="stat-num" data-suffix="%" data-target="380">0</div>
+    <div class="stat-label">Conversion Uplift</div>
+    <div class="stat-desc">Compared to the prior product page through interactive 3D configuration and contextual storytelling.</div>
+  </div>
+</div>
+
+<!-- MARQUEE 1 -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-word filled">AIR</span>
+    <span class="marquee-word accent">MAX</span>
+    <span class="marquee-word">360</span>
+    <span class="marquee-word filled">JUST</span>
+    <span class="marquee-word accent">DO</span>
+    <span class="marquee-word">IT</span>
+    <span class="marquee-word filled">AIR</span>
+    <span class="marquee-word accent">MAX</span>
+    <span class="marquee-word">360</span>
+    <span class="marquee-word filled">JUST</span>
+    <span class="marquee-word accent">DO</span>
+    <span class="marquee-word">IT</span>
+  </div>
+</div>
+
+<!-- BODY TEXT SECTION -->
+<section style="padding: 120px 48px; text-align:center;">
+  <div class="section-body reveal">
+    <span class="sec-label">// Design Language</span>
+    <h3>Bold type. Relentless motion.<br>A palette built from the street up.</h3>
+    <p style="margin-top:24px;">We developed a kinetic design system rooted in Air Max DNA — the heat map of the Air unit became a colour story, its geometry a typographic frame. Every scroll gesture echoes the bounce of a sole. Every hover reveals a layer of archive. The result feels like a sneaker that moves through time.</p>
+  </div>
+</section>
+
+<!-- COLOR SWATCHES -->
+<div class="swatch-row reveal">
+  <div class="swatch">
+    <div class="swatch-color" style="background:#ff3c00"></div>
+    <span class="swatch-name">Infrared</span>
+  </div>
+  <div class="swatch">
+    <div class="swatch-color" style="background:#0a0a0a;border-color:rgba(240,236,227,0.2)"></div>
+    <span class="swatch-name">Black</span>
+  </div>
+  <div class="swatch">
+    <div class="swatch-color" style="background:#f0ece3"></div>
+    <span class="swatch-name">Sail</span>
+  </div>
+  <div class="swatch">
+    <div class="swatch-color" style="background:#ffd100"></div>
+    <span class="swatch-name">Speed Yellow</span>
+  </div>
+  <div class="swatch">
+    <div class="swatch-color" style="background:#3d7fff"></div>
+    <span class="swatch-name">Royal</span>
+  </div>
+  <div class="swatch">
+    <div class="swatch-color" style="background:#2d2d2d"></div>
+    <span class="swatch-name">Anthracite</span>
+  </div>
+</div>
+
+<!-- MEDIA GRID -->
+<div class="media-grid" style="margin-top:0">
+  <!-- TALL LEFT -->
+  <div class="media-cell tall reveal">
+    <div class="inner colorway-bg-1" style="height:100%;min-height:520px;flex-direction:column;gap:20px;">
+      <svg viewBox="0 0 400 220" style="width:80%;filter:drop-shadow(0 20px 40px rgba(255,60,0,0.4))">
+        <ellipse cx="200" cy="210" rx="150" ry="8" fill="rgba(0,0,0,0.4)"/>
+        <path d="M50,175 Q120,185 200,182 Q270,179 360,172 L355,188 Q265,196 200,198 Q115,200 48,190 Z" fill="#1a0800"/>
+        <path d="M55,162 Q130,172 200,169 Q265,166 355,158 L360,174 Q270,181 200,183 Q120,186 50,177 Z" fill="#f0ece3"/>
+        <path d="M65,150 Q120,136 180,133 L240,131 Q310,134 350,152 L355,160 Q270,167 200,169 Q120,172 58,163 Z" fill="#0a0a0a"/>
+        <path d="M140,148 Q190,122 260,135 Q290,142 295,152 Q250,140 210,149 Q185,156 165,161 Z" fill="#ff3c00" opacity="0.9"/>
+        <text x="200" y="198" text-anchor="middle" font-size="7" font-family="Space Mono" fill="rgba(136,136,136,0.4)" letter-spacing="3">INFRARED ◆ 2024</text>
+      </svg>
+      <span style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,236,227,0.4)">Infrared / Black</span>
+      <span class="caption">Colorway 01</span>
+    </div>
+  </div>
+
+  <!-- RIGHT TOP -->
+  <div class="media-cell reveal reveal-delay-1">
+    <div class="inner colorway-bg-2" style="flex-direction:column;gap:16px;">
+      <svg viewBox="0 0 400 220" style="width:80%;filter:drop-shadow(0 20px 40px rgba(61,127,255,0.4))">
+        <ellipse cx="200" cy="210" rx="150" ry="8" fill="rgba(0,0,0,0.4)"/>
+        <path d="M50,175 Q120,185 200,182 Q270,179 360,172 L355,188 Q265,196 200,198 Q115,200 48,190 Z" fill="#001020"/>
+        <path d="M55,162 Q130,172 200,169 Q265,166 355,158 L360,174 Q270,181 200,183 Q120,186 50,177 Z" fill="#e8e0d0"/>
+        <path d="M65,150 Q120,136 180,133 L240,131 Q310,134 350,152 L355,160 Q270,167 200,169 Q120,172 58,163 Z" fill="#0a1020"/>
+        <path d="M140,148 Q190,122 260,135 Q290,142 295,152 Q250,140 210,149 Q185,156 165,161 Z" fill="#3d7fff" opacity="0.9"/>
+        <text x="200" y="198" text-anchor="middle" font-size="7" font-family="Space Mono" fill="rgba(136,136,136,0.4)" letter-spacing="3">ROYAL ◆ 2024</text>
+      </svg>
+      <span style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,236,227,0.4)">Royal / White</span>
+      <span class="caption">Colorway 02</span>
+    </div>
+  </div>
+
+  <!-- RIGHT BOTTOM -->
+  <div class="media-cell reveal reveal-delay-2">
+    <div class="inner colorway-bg-3" style="flex-direction:column;gap:16px;">
+      <svg viewBox="0 0 400 220" style="width:80%;filter:drop-shadow(0 20px 40px rgba(100,200,50,0.3))">
+        <ellipse cx="200" cy="210" rx="150" ry="8" fill="rgba(0,0,0,0.4)"/>
+        <path d="M50,175 Q120,185 200,182 Q270,179 360,172 L355,188 Q265,196 200,198 Q115,200 48,190 Z" fill="#071200"/>
+        <path d="M55,162 Q130,172 200,169 Q265,166 355,158 L360,174 Q270,181 200,183 Q120,186 50,177 Z" fill="#e8e0d0"/>
+        <path d="M65,150 Q120,136 180,133 L240,131 Q310,134 350,152 L355,160 Q270,167 200,169 Q120,172 58,163 Z" fill="#0a1500"/>
+        <path d="M140,148 Q190,122 260,135 Q290,142 295,152 Q250,140 210,149 Q185,156 165,161 Z" fill="#64c832" opacity="0.9"/>
+        <text x="200" y="198" text-anchor="middle" font-size="7" font-family="Space Mono" fill="rgba(136,136,136,0.4)" letter-spacing="3">VOLT ◆ 2024</text>
+      </svg>
+      <span style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,236,227,0.4)">Volt / Black</span>
+      <span class="caption">Colorway 03</span>
+    </div>
+  </div>
+</div>
+
+<!-- SPLIT -->
+<div class="split-section" style="margin-top:80px;">
+  <div class="split-col reveal">
+    <h4>BUILT FOR SPEED</h4>
+    <p>Sub-second load times. Optimised asset delivery. Progressive rendering ensures every interaction feels immediate — from the 3D configurator to archival gallery deep-dives on mobile data.</p>
+  </div>
+  <div class="split-col reveal reveal-delay-1">
+    <h4>DESIGNED FOR FANS</h4>
+    <p>Community drops, personalised timelines, and a colorway builder that lets fans design their perfect pair — then share it instantly. The site is a destination, not just a product page.</p>
+  </div>
+</div>
+
+<!-- MARQUEE 2 -->
+<div class="marquee-section" style="margin-top:80px;">
+  <div class="marquee-track reverse">
+    <span class="marquee-word">VISIBLE</span>
+    <span class="marquee-word filled">AIR</span>
+    <span class="marquee-word accent">★</span>
+    <span class="marquee-word">VISIBLE</span>
+    <span class="marquee-word filled">AIR</span>
+    <span class="marquee-word accent">★</span>
+    <span class="marquee-word">VISIBLE</span>
+    <span class="marquee-word filled">AIR</span>
+    <span class="marquee-word accent">★</span>
+    <span class="marquee-word">VISIBLE</span>
+    <span class="marquee-word filled">AIR</span>
+    <span class="marquee-word accent">★</span>
+  </div>
+</div>
+
+<!-- MORE PROJECTS -->
+<div class="more-projects">
+  <h2 class="more-label reveal">More <span>+</span><br>Projects</h2>
+  <div class="project-list">
+    <a href="#" class="project-item reveal">
+      <div>
+        <div class="proj-title">Adidas Originals</div>
+        <div class="proj-tags" style="margin-top:8px;">
+          <span>Branding</span><span>3D</span><span>Web</span>
+        </div>
+      </div>
+      <div class="proj-arrow">→</div>
+    </a>
+    <a href="#" class="project-item reveal reveal-delay-1">
+      <div>
+        <div class="proj-title">New Balance 1906R</div>
+        <div class="proj-tags" style="margin-top:8px;">
+          <span>Campaign</span><span>Motion</span><span>WebGL</span>
+        </div>
+      </div>
+      <div class="proj-arrow">→</div>
+    </a>
+    <a href="#" class="project-item reveal reveal-delay-2">
+      <div>
+        <div class="proj-title">ASICS Gel-Kayano</div>
+        <div class="proj-tags" style="margin-top:8px;">
+          <span>Identity</span><span>Web Design</span><span>Dev</span>
+        </div>
+      </div>
+      <div class="proj-arrow">→</div>
+    </a>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg-text">GO</div>
+  <p class="cta-label">// Let's Build Something</p>
+  <h2 class="cta-headline reveal">
+    How about we<br>do <em>a thing</em><br>or two, together.
+  </h2>
+  <a href="#" class="cta-btn reveal">Get in touch →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">VVORK<span>+</span>STUDIO</div>
+    <p style="font-size:10px;letter-spacing:0.1em;color:var(--mid);margin-top:12px;">London · Amsterdam · Remote</p>
+  </div>
+  <div class="footer-links">
+    <a href="#">Work →</a>
+    <a href="#">Services →</a>
+    <a href="#">About →</a>
+    <a href="#">Careers →</a>
+    <a href="#">Privacy →</a>
+  </div>
+</footer>
+<p class="footer-copy">© 2024 VVORK+STUDIO. All rights reserved. Made with obsession.</p>
+
+<script>
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  (function animCursor() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  })();
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '20px'; cursor.style.height = '20px';
+      ring.style.width = '60px'; ring.style.height = '60px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '12px'; cursor.style.height = '12px';
+      ring.style.width = '40px'; ring.style.height = '40px';
+    });
+  });
+
+  // PROGRESS BAR
+  const bar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    bar.style.width = pct + '%';
+  });
+
+  // SCROLL REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => io.observe(el));
+
+  // COUNT-UP
+  function countUp(el, target, suffix = '') {
+    let start = 0;
+    const isBig = target > 10000;
+    const dur = isBig ? 2000 : 1500;
+    const step = target / (dur / 16);
+    function update() {
+      start = Math.min(start + step, target);
+      const display = isBig
+        ? (start >= 1000000 ? (start/1000000).toFixed(1) + 'M' : Math.floor(start/1000) + 'K')
+        : Math.floor(start) + suffix;
+      el.textContent = display;
+      if (start < target) requestAnimationFrame(update);
+    }
+    update();
+  }
+
+  const statNums = document.querySelectorAll('.stat-num[data-target]');
+  const statObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const el = e.target;
+        const t = +el.getAttribute('data-target');
+        const s = el.getAttribute('data-suffix') || '';
+        countUp(el, t, s);
+        statObs.unobserve(el);
+      }
+    });
+  }, { threshold: 0.3 });
+  statNums.forEach(el => statObs.observe(el));
+</script>
+</body>
+</html>
